@@ -2,11 +2,10 @@ import datetime
 import os.path
 import pandas as pd
 import os
-from typing import Any, Union
+from typing import Union
 
 import requests
 from dotenv import load_dotenv
-# from pandas import DataFrame
 
 
 def hello_date():
@@ -30,7 +29,7 @@ path_xlsx = "../../data/operations.xlsx"
 
 
 def read_file(path: str) -> list[dict]:
-    """Функция чтения excel файла"""
+    """Функция чтения excel файла, формирующая словарь оперделенного вида для удобства использования"""
     file_name = os.path.join(os.path.abspath(__name__), path)
     transactions = []
     transaction = pd.read_excel(file_name)
@@ -53,7 +52,7 @@ def read_file(path: str) -> list[dict]:
                 "Investment bank": row["Округление на инвесткопилку"],
                 "add with round": row["Сумма операции с округлением"]
             })
-    # transactions.pop(1)
+
     return transactions
 
 
@@ -93,25 +92,9 @@ def return_invest() -> list[dict]:
 # print(return_invest())
 
 
-# def card_info(transactions: list[dict]) -> list[dict]:
-#     total_info = {
-#         "card number": " ",
-#         "operation add": 0,
-#         "total cash": 0
-#     }
-#     info = []
-#     total = []
-#     i = 0
-#     [info.append(transaction.get("card number")) for transaction in transactions if transaction.get("card number") not in info]
-#     for transaction in transactions:
-#         for i in info:
-#             if str(i) in str(transaction.get("card number")):
-#                 total_info["card number"] = info[0]
-#             total_info["operation add"] += round(transaction.get("add"), 2)
-#     total_info["total cash"] = round(total_info["operation add"] / 100, 2)
-#     total.append(total_info)
-#     return total
 def card_info(transactions: list[dict]) -> list[dict]:
+    """Функция, которая выделяет из списка все карты и кратко резюмирует данные по ним"""
+
     total_info = {}
     for transaction in transactions:
         card_number = transaction.get("card number")
@@ -131,9 +114,10 @@ def card_info(transactions: list[dict]) -> list[dict]:
 
 
 def top_5(transactions: list[dict]) -> list[dict]:
-    list_sorted = sorted(transactions, key=lambda transaction: transaction["add"])
-    return list_sorted[0:4]
+    """Функция реализующая сортировку топ-5 транзакций по всем картам пользователя"""
+    list_sorted = sorted(transactions, key=lambda transaction: transaction["add"], reverse=True)
+    return list_sorted[:5]
 
 
-print(top_5(read_file(path_xlsx)))
+# print(top_5(read_file(path_xlsx)))
 
