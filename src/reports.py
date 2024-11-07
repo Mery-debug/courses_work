@@ -1,9 +1,8 @@
 import json
 from functools import wraps
-from typing import Optional, Any, Union
-
-from datetime import datetime
-import pandas as pd
+from typing import Any, Union
+import datetime
+from src.utils import read_file
 
 
 def reports(file: Union[str, None] = "result.json") -> Any:
@@ -31,18 +30,23 @@ def reports(file: Union[str, None] = "result.json") -> Any:
     return wrapper
 
 
-def spending_by_category(transactions: list[dict], category: str, date: Optional[str] = None) -> float:
-    """Функция сортировки транзакций по категории по дате"""
-    if date is None:
-        date = datetime.now()
-    else:
-        date = pd.to_datetime(date)
+path_xlsx = "../../data/operations.xlsx"
+transactions = read_file(path_xlsx)
 
-    start_date = date - pd.DateOffset(months=3)
-    filtered_transactions = [
-        transaction for transaction in transactions
-        if transaction['category'] == category and
-           start_date <= transaction['date'] <= date
-    ]
-    return sum(transaction['amount'] for transaction in filtered_transactions)
 
+def category_by_date(category: str, date: str = None) -> list[dict]:
+    lst = []
+    total = []
+    for transaction in transactions:
+        if category in str(transaction.get("category")):
+            lst.append(transaction)
+    if not date:
+        date = datetime.datetime.now()
+        date_before = datetime.timedelta(weeks=12)
+        for ls in lst:
+            if str(date_before) >= ls.get("date of operation") >= str(date):
+                total.append(ls)
+        return total
+
+
+# print(category_by_date("Супермаркеты"))

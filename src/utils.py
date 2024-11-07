@@ -1,8 +1,10 @@
 import datetime
 import os.path
+from venv import logger
+
 import pandas as pd
 import os
-from typing import Union
+from typing import Union, Any
 import json
 import logging
 
@@ -11,6 +13,10 @@ from dotenv import load_dotenv
 
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logger = logging.getLogger(__name__)
+console_handler = logging.StreamHandler()
+logger.addHandler(console_handler)
+logger.setLevel(logging.DEBUG)
 
 
 def hello_date():
@@ -101,9 +107,9 @@ def return_cash() -> Union[list, str]:
     headers = {"apikey": f"{api_key}"}
     response_usd = requests.get(url_usd, headers=headers)
     response_eur = requests.get(url_eur, headers=headers)
-    # if response_usd.status_code == 200 and response_eur.status_code == 200:
-    eur = round(response_eur.json()["result"], 2)
-    usd = round(response_usd.json()["result"], 2)
+    if response_usd.status_code == 200 and response_eur.status_code == 200:
+        eur = round(response_eur.json()["result"], 2)
+        usd = round(response_usd.json()["result"], 2)
     return [eur, usd]
 
 
@@ -185,3 +191,9 @@ def top_5(transactions: list[dict]) -> list[dict]:
 #              'add': 100000.0, 'currency': 'RUB', 'cashback': None, 'category': 'Пополнения',
 #              'description': 'Перевод с карты', 'Investment bank': 0, 'add with round': 100000.0}]))
 
+
+# def read_excel_dataframe(file: Any = None) -> pd.DataFrame:
+#     """Функция, для чтения excel файла с выводов DataFrame"""
+#     logger.info(f"Читаем файл {file} и выводим данные в формате DataFrame")
+#     file_read_xlsx = pd.read_excel(file)
+#     return file_read_xlsx

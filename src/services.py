@@ -1,5 +1,3 @@
-from src.utils import read_file
-
 path_xlsx = "../../data/operations.xlsx"
 
 
@@ -14,6 +12,3 @@ def simpl_search(transactions: list[dict], search_str: str) -> list[dict]:
         if search_str in description or search_str in str(category):
             total.append(transaction)
     return total
-
-
-# print(simpl_search(read_file(path_xlsx), "Перевод"))
