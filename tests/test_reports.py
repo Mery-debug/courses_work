@@ -1,8 +1,8 @@
-import pytest
 from unittest.mock import mock_open, patch
 from typing import Any
-
-from src.reports import reports
+import pandas as pd
+import pytest
+from src.reports import reports, spending_by_category
 
 
 @pytest.fixture
@@ -43,4 +43,18 @@ def test_reports_no_file_output(capsys: Any) -> None:
     sample_function_no_file(5)
     captured = capsys.readouterr()
     assert captured.out.strip() == "10"
+
+
+def test_spending_by_category():
+    data = [
+        {'category': 'food', 'date': pd.Timestamp('2023-01-01'), 'amount': 50},
+        {'category': 'transport', 'date': pd.Timestamp('2023-01-15'), 'amount': 20},
+        {'category': 'food', 'date': pd.Timestamp('2023-02-01'), 'amount': 40},
+        {'category': 'entertainment', 'date': pd.Timestamp('2023-02-15'), 'amount': 30},
+        {'category': 'food', 'date': pd.Timestamp('2023-03-01'), 'amount': 60}
+    ]
+    result = spending_by_category(data, 'food', date='2023-02-15')
+    assert result == 90
+    result = spending_by_category(data, 'nonexistent')
+    assert result == 0
 

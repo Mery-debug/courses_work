@@ -31,12 +31,18 @@ def reports(file: Union[str, None] = "result.json") -> Any:
     return wrapper
 
 
-def spending_by_category(transactions: pd.DataFrame, category: str, date: Optional[str] = None) -> pd.DataFrame:
+def spending_by_category(transactions: list[dict], category: str, date: Optional[str] = None) -> float:
     """Функция сортировки транзакций по категории по дате"""
     if date is None:
         date = datetime.now()
     else:
         date = pd.to_datetime(date)
+
     start_date = date - pd.DateOffset(months=3)
-    filtered_transactions = transactions[(transactions['category'] == category) and (transactions['date'] >= start_date) and (transactions['date'] <= date)]
-    return filtered_transactions['amount'].sum()
+    filtered_transactions = [
+        transaction for transaction in transactions
+        if transaction['category'] == category and
+           start_date <= transaction['date'] <= date
+    ]
+    return sum(transaction['amount'] for transaction in filtered_transactions)
+
