@@ -16,4 +16,4 @@ def simpl_search(transactions: list[dict], search_str: str) -> list[dict]:
     return total
 
 
-print(simpl_search(read_file(path_xlsx), "Перевод"))
+# print(simpl_search(read_file(path_xlsx), "Перевод"))
