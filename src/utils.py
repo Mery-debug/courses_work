@@ -13,10 +13,6 @@ from dotenv import load_dotenv
 
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
-logger = logging.getLogger(__name__)
-console_handler = logging.StreamHandler()
-logger.addHandler(console_handler)
-logger.setLevel(logging.DEBUG)
 
 
 def hello_date():
@@ -47,6 +43,7 @@ path_xlsx = "../../data/operations.xlsx"
 def read_file(path: str) -> list[dict]:
     """Функция чтения excel файла, формирующая словарь оперделенного вида для удобства использования"""
     file_name = os.path.join(os.path.abspath(__name__), path)
+    logging.info(f'Запущенная функция: {__file__}')
     transactions = []
     transaction = pd.read_excel(file_name)
     for index, row in transaction.iterrows():
@@ -68,7 +65,7 @@ def read_file(path: str) -> list[dict]:
                 "Investment bank": row["Округление на инвесткопилку"],
                 "add with round": row["Сумма операции с округлением"]
             })
-
+    logging.info(f'Сгенерирован список словарей, со словарем вида: {transactions[:1]}')
     return transactions
 
 
@@ -110,7 +107,7 @@ def return_cash() -> Union[list, str]:
     if response_usd.status_code == 200 and response_eur.status_code == 200:
         eur = round(response_eur.json()["result"], 2)
         usd = round(response_usd.json()["result"], 2)
-    return [eur, usd]
+        return [eur, usd]
 
 
 def return_invest() -> list[dict]:
@@ -191,9 +188,3 @@ def top_5(transactions: list[dict]) -> list[dict]:
 #              'add': 100000.0, 'currency': 'RUB', 'cashback': None, 'category': 'Пополнения',
 #              'description': 'Перевод с карты', 'Investment bank': 0, 'add with round': 100000.0}]))
 
-
-# def read_excel_dataframe(file: Any = None) -> pd.DataFrame:
-#     """Функция, для чтения excel файла с выводов DataFrame"""
-#     logger.info(f"Читаем файл {file} и выводим данные в формате DataFrame")
-#     file_read_xlsx = pd.read_excel(file)
-#     return file_read_xlsx
