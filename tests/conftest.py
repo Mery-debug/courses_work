@@ -1,6 +1,7 @@
 import pytest
 import mock
 import patch
+import json
 
 
 @pytest.fixture
@@ -51,4 +52,12 @@ def transactions() -> list[dict]:
         {"card number": "1234-5678-9012-3456", "add": 1000}
     ]
 
+
+@pytest.fixture
+def mock_user_settings():
+    # Настройки пользователя, возвращаемые в user_settings.json
+    settings = {
+        "user_currencies": ["USD", "EUR"]
+    }
+    return json.dumps(settings)
 

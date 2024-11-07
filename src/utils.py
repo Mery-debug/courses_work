@@ -32,7 +32,7 @@ def hello_date():
     return hello
 
 
-print(hello_date())
+# print(hello_date())
 
 
 path_xlsx = "../../data/operations.xlsx"
@@ -101,12 +101,10 @@ def return_cash() -> Union[list, str]:
     headers = {"apikey": f"{api_key}"}
     response_usd = requests.get(url_usd, headers=headers)
     response_eur = requests.get(url_eur, headers=headers)
-    if response_usd.status_code == 200 and response_eur.status_code == 200:
-        eur = round(response_eur.json()["result"], 2)
-        usd = round(response_usd.json()["result"], 2)
-        return [eur, usd]
-    else:
-        return f"Возможные причины {response_eur.reason} {response_usd.reason}"
+    # if response_usd.status_code == 200 and response_eur.status_code == 200:
+    eur = round(response_eur.json()["result"], 2)
+    usd = round(response_usd.json()["result"], 2)
+    return [eur, usd]
 
 
 def return_invest() -> list[dict]:
