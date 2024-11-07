@@ -1,16 +1,30 @@
-# This is a sample Python script.
+import pandas
 
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
-
-
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+from src.views import main_str
+from src.services import simpl_search
+from src.reports import category_by_date
+from src.utils import read_file
+import os
 
 
-# Press the green button in the gutter to run the script.
+path_xlsx = "data/operations.xlsx"
+path = os.path.abspath(path_xlsx)
+read = read_file(path)
+# user = str(input("По какому слову в описании или категории будем искать?"))
+# user_2 = str(input("По какой категории будем искать?"))
+
+
+def main(user: str, user_2: str, ):
+    m = main_str()
+    s = simpl_search(read, user)
+    c = category_by_date(read, user_2)
+    dct = {
+        "main": m,
+        "services": s,
+        "reports": c
+    }
+    return dct
+
+
 if __name__ == '__main__':
-    print_hi('PyCharm')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+    print(main("Пополнение", "Супермаркеты"))

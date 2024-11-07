@@ -30,11 +30,11 @@ def reports(file: Union[str, None] = "result.json") -> Any:
     return wrapper
 
 
-path_xlsx = "../../data/operations.xlsx"
-transactions = read_file(path_xlsx)
+# path_xlsx = "../../data/operations.xlsx"
+# transactions = read_file(path_xlsx)
 
 
-def category_by_date(category: str, date: str = None) -> list[dict]:
+def category_by_date(transactions: list[dict], category: str, date: str = None) -> list[dict]:
     lst = []
     total = []
     for transaction in transactions:

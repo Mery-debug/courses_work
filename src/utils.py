@@ -37,13 +37,14 @@ def hello_date():
 # print(hello_date())
 
 
-path_xlsx = "../../data/operations.xlsx"
+path_xlsx = "data/operations.xlsx"
+# path = os.path.abspath(path_xlsx)
 
 
 def read_file(path: str) -> list[dict]:
     """Функция чтения excel файла, формирующая словарь оперделенного вида для удобства использования"""
     file_name = os.path.join(os.path.abspath(__name__), path)
-    logging.info(f'Запущенная функция: {__file__}')
+    logging.info(f'Запущенная функция: {__name__}')
     transactions = []
     transaction = pd.read_excel(file_name)
     for index, row in transaction.iterrows():
@@ -93,14 +94,14 @@ def read_file(path: str) -> list[dict]:
 
 def return_cash() -> Union[list, str]:
     """Function API take dict transaction and return amount"""
-    with open("user_settings.json", "r", encoding="utf-8") as file:
-        settings = json.load(file)
-        val_1 = settings.get("user_currencies")[0]
-        val_2 = settings.get("user_currencies")[1]
+    # with open("user_settings.json", "r", encoding="utf-8") as file:
+    #     settings = json.load(file)
+    #     val_1 = settings.get("user_currencies")[0]
+    #     val_2 = settings.get("user_currencies")[1]
     load_dotenv()
     api_key = os.getenv("API_KEY")
-    url_usd = f"https://api.apilayer.com/exchangerates_data/convert?to=RUB&from={val_1}&amount=1"
-    url_eur = f"https://api.apilayer.com/exchangerates_data/convert?to=RUB&from={val_2}&amount=1"
+    url_usd = f"https://api.apilayer.com/exchangerates_data/convert?to=RUB&from=USD&amount=1"
+    url_eur = f"https://api.apilayer.com/exchangerates_data/convert?to=RUB&from=EUR&amount=1"
     headers = {"apikey": f"{api_key}"}
     response_usd = requests.get(url_usd, headers=headers)
     response_eur = requests.get(url_eur, headers=headers)
@@ -115,15 +116,11 @@ def return_invest() -> list[dict]:
     Функция АПИ которая выводит акции из s&p 500 по запросу пользователя,
     ввести в качестве аргумента название акции, например APPL
     """
-    with open("user_settings.json", "r", encoding="utf-8") as file:
-        settings = json.load(file)
-        lst = settings.get("user_stocks")
     load_dotenv()
     response = []
     apikey = os.getenv("APIKEY")
-    url = f"https://financialmodelingprep.com/api/v3/quote/{lst}?apikey={apikey}"
-    response.append(requests.get(url).json())
-    return response
+    url = f"https://financialmodelingprep.com/api/v3/quote/AAPL,AMZN,GOOGL,MSFT,TSLA?apikey={apikey}"
+    return requests.get(url).json()
 
 
 # print(return_invest())
