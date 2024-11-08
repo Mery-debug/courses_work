@@ -20,6 +20,10 @@ exclude = '''
 [tool.isort]
 line-length = 119
 
+[mypy]
+ignore_missing_imports = True
+disallow_untyped_defs = True
+check_untyped_defs = True
 
 [tool.poetry.dependencies]
 python = "^3.12"
