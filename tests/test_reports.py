@@ -1,8 +1,7 @@
 from unittest.mock import mock_open, patch
 from typing import Any
-import pandas as pd
 import pytest
-from src.reports import reports, spending_by_category
+from src.reports import reports, category_by_date
 
 
 @pytest.fixture
@@ -45,16 +44,5 @@ def test_reports_no_file_output(capsys: Any) -> None:
     assert captured.out.strip() == "10"
 
 
-def test_spending_by_category():
-    data = [
-        {'category': 'food', 'date': pd.Timestamp('2023-01-01'), 'amount': 50},
-        {'category': 'transport', 'date': pd.Timestamp('2023-01-15'), 'amount': 20},
-        {'category': 'food', 'date': pd.Timestamp('2023-02-01'), 'amount': 40},
-        {'category': 'entertainment', 'date': pd.Timestamp('2023-02-15'), 'amount': 30},
-        {'category': 'food', 'date': pd.Timestamp('2023-03-01'), 'amount': 60}
-    ]
-    result = spending_by_category(data, 'food', date='2023-02-15')
-    assert result == 90
-    result = spending_by_category(data, 'nonexistent')
-    assert result == 0
-
+def test_category_by_date(trans: list[dict], cate: str, expect: list[dict]) -> None:
+    assert category_by_date(trans, cate) == expect

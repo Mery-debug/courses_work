@@ -1,8 +1,6 @@
-import pandas
-
 from src.views import main_str
 from src.services import simpl_search
-from src.reports import category_by_date
+from src.reports import category_by_date, reports
 from src.utils import read_file
 import os
 

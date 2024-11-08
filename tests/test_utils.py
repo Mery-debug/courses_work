@@ -135,5 +135,5 @@ def test_return_invest(mock_getenv, mock_requests_get, mock_open):
 
     result = return_invest()
     assert len(result) == 1
-    assert result[0][0]['symbol'] == 'AAPL'
-    assert result[0][0]['price'] == 150.0
+    assert result[0]['symbol'] == 'AAPL'
+    assert result[0]['price'] == 150.0

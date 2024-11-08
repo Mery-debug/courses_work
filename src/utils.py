@@ -37,12 +37,12 @@ def hello_date():
 # print(hello_date())
 
 
-path_xlsx = "data/operations.xlsx"
+# path_xlsx = "data/operations.xlsx"
 # path = os.path.abspath(path_xlsx)
 
 
 def read_file(path: str) -> list[dict]:
-    """Функция чтения excel файла, формирующая словарь оперделенного вида для удобства использования"""
+    """Функция чтения excel файла, формирующая словарь оперделеного вида для удобства использования"""
     file_name = os.path.join(os.path.abspath(__name__), path)
     logging.info(f'Запущенная функция: {__name__}')
     transactions = []

@@ -1,7 +1,11 @@
+import os
+
 from src.utils import hello_date, read_file, return_cash, return_invest, card_info, top_5
 from src.reports import reports
 
-path_xlsx = "../data/operations.xlsx"
+
+path_xlsx = "../../data/operations.xlsx"
+# path = os.path.abspath(path_xlsx)
 
 
 @reports()
@@ -14,10 +18,16 @@ def main_str():
     t = top_5(r)
     lst = []
     lst_2 = []
+    nan = None
     for i in v:
-        dct = {"last_digits": i.get("card number"),
-               "total_spend": round(i.get("operation add"), 2),
-               "cashback": round(i.get("total cash"), 2)}
+        if i.get("card number") == nan:
+            dct = {"last_digits": None,
+                   "total_spend": round(i.get("operation add"), 2),
+                   "cashback": round(i.get("total cash"), 2)}
+        else:
+            dct = {"last_digits": i.get("card number"),
+                   "total_spend": round(i.get("operation add"), 2),
+                   "cashback": round(i.get("total cash"), 2)}
         lst.append(dct)
     for re in ret_1:
         dct_2 = {

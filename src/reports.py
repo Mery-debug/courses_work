@@ -31,7 +31,7 @@ def reports(file: Union[str, None] = "result.json") -> Any:
 
 
 # path_xlsx = "../../data/operations.xlsx"
-# transactions = read_file(path_xlsx)
+# transact = read_file(path_xlsx)
 
 
 def category_by_date(transactions: list[dict], category: str, date: str = None) -> list[dict]:
@@ -49,4 +49,4 @@ def category_by_date(transactions: list[dict], category: str, date: str = None) 
         return total
 
 
-# print(category_by_date("Супермаркеты"))
+# print(category_by_date(transact, "Супермаркеты"))
