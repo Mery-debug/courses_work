@@ -1,34 +1,34 @@
 import datetime
 import os.path
-from venv import logger
 
 import pandas as pd
 import os
-from typing import Union, Any
-import json
+from typing import Union
 import logging
 
 import requests
 from dotenv import load_dotenv
 
 
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logging.basicConfig(
+    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
+)
 
 
 def hello_date():
     """Функция приветствия от времени суток"""
     now = datetime.datetime.now()
-    logging.info(f'Текущая дата и время: {now}')
+    logging.info(f"Текущая дата и время: {now}")
     now += datetime.timedelta()
     hello = {"hello": ""}
     if 4 < now.hour <= 12:
-        hello["hello"] = 'Доброе утро'
+        hello["hello"] = "Доброе утро"
     if 16 >= now.hour > 12:
-        hello["hello"] = 'Добрый день'
+        hello["hello"] = "Добрый день"
     if 24 >= now.hour > 16:
-        hello["hello"] = 'Добрый вечер'
+        hello["hello"] = "Добрый вечер"
     if 4 >= now.hour >= 0:
-        hello["hello"] = 'Доброй ночи'
+        hello["hello"] = "Доброй ночи"
 
     logging.info(f'Сгенерированное приветствие: {hello["hello"]}')
     return hello
@@ -44,7 +44,7 @@ def hello_date():
 def read_file(path: str) -> list[dict]:
     """Функция чтения excel файла, формирующая словарь оперделеного вида для удобства использования"""
     file_name = os.path.join(os.path.abspath(__name__), path)
-    logging.info(f'Запущенная функция: {__name__}')
+    logging.info(f"Запущенная функция: {__name__}")
     transactions = []
     transaction = pd.read_excel(file_name)
     for index, row in transaction.iterrows():
@@ -56,7 +56,7 @@ def read_file(path: str) -> list[dict]:
                 "status": row["Статус"],
                 "operation": {
                     "add": row["Сумма операции"],
-                    "currency": row["Валюта операции"]
+                    "currency": row["Валюта операции"],
                 },
                 "add": row["Сумма платежа"],
                 "currency": row["Валюта платежа"],
@@ -64,9 +64,10 @@ def read_file(path: str) -> list[dict]:
                 "category": row["Категория"],
                 "description": row["Описание"],
                 "Investment bank": row["Округление на инвесткопилку"],
-                "add with round": row["Сумма операции с округлением"]
-            })
-    logging.info(f'Сгенерирован список словарей, со словарем вида: {transactions[:1]}')
+                "add with round": row["Сумма операции с округлением"],
+            }
+        )
+    logging.info(f"Сгенерирован список словарей, со словарем вида: {transactions[:1]}")
     return transactions
 
 
@@ -100,8 +101,12 @@ def return_cash() -> Union[list, str]:
     #     val_2 = settings.get("user_currencies")[1]
     load_dotenv()
     api_key = os.getenv("API_KEY")
-    url_usd = f"https://api.apilayer.com/exchangerates_data/convert?to=RUB&from=USD&amount=1"
-    url_eur = f"https://api.apilayer.com/exchangerates_data/convert?to=RUB&from=EUR&amount=1"
+    url_usd = (
+        f"https://api.apilayer.com/exchangerates_data/convert?to=RUB&from=USD&amount=1"
+    )
+    url_eur = (
+        f"https://api.apilayer.com/exchangerates_data/convert?to=RUB&from=EUR&amount=1"
+    )
     headers = {"apikey": f"{api_key}"}
     response_usd = requests.get(url_usd, headers=headers)
     response_eur = requests.get(url_eur, headers=headers)
@@ -117,7 +122,6 @@ def return_invest() -> list[dict]:
     ввести в качестве аргумента название акции, например APPL
     """
     load_dotenv()
-    response = []
     apikey = os.getenv("APIKEY")
     url = f"https://financialmodelingprep.com/api/v3/quote/AAPL,AMZN,GOOGL,MSFT,TSLA?apikey={apikey}"
     return requests.get(url).json()
@@ -136,7 +140,7 @@ def card_info(transactions: list[dict]) -> list[dict]:
             total_info[card_number] = {
                 "card number": card_number,
                 "operation add": 0,
-                "total cash": 0
+                "total cash": 0,
             }
         total_info[card_number]["operation add"] += round(transaction.get("add", 0), 2)
     for info in total_info.values():
@@ -149,7 +153,9 @@ def card_info(transactions: list[dict]) -> list[dict]:
 
 def top_5(transactions: list[dict]) -> list[dict]:
     """Функция реализующая сортировку топ-5 транзакций по всем картам пользователя"""
-    list_sorted = sorted(transactions, key=lambda transaction: transaction.get("add", 0), reverse=True)
+    list_sorted = sorted(
+        transactions, key=lambda transaction: transaction.get("add", 0), reverse=True
+    )
     total_lst = []
 
     for lst in list_sorted[:5]:
@@ -157,7 +163,7 @@ def top_5(transactions: list[dict]) -> list[dict]:
             "date": lst.get("date of operation", ""),
             "amount": lst.get("add", 0),
             "category": lst.get("category", ""),
-            "description": lst.get("description", "")
+            "description": lst.get("description", ""),
         }
         total_lst.append(total)
 
@@ -184,4 +190,3 @@ def top_5(transactions: list[dict]) -> list[dict]:
 #              'card number': None, 'status': 'OK', 'operation': {'add': 100000.0, 'currency': 'RUB'},
 #              'add': 100000.0, 'currency': 'RUB', 'cashback': None, 'category': 'Пополнения',
 #              'description': 'Перевод с карты', 'Investment bank': 0, 'add with round': 100000.0}]))
-

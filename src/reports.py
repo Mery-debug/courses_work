@@ -7,6 +7,7 @@ from src.utils import read_file
 
 def reports(file: Union[str, None] = "result.json") -> Any:
     """Декоратор, создающий результат работы функции в json file"""
+
     def wrapper(func: Any) -> Any:
         @wraps(func)
         def inner(*args: Any, **kwargs: Any) -> Any:
@@ -26,7 +27,9 @@ def reports(file: Union[str, None] = "result.json") -> Any:
                 except TypeError:
                     return f"неверный формат"
             return dum
+
         return inner
+
     return wrapper
 
 
